@@ -3,8 +3,7 @@ from sqlalchemy.orm import Session
 
 from app.database import get_db
 from app.schemas.event import EventCreate
-from app.services.event_service import add_event, filter_events
-
+from app.services.event_service import add_event, filter_events, get_user_summary
 router = APIRouter(prefix="/events", tags=["Events"])
 
 @router.post("")
@@ -27,3 +26,4 @@ def get_events(
         user_id=user_id,
         event_type=type
     )
+

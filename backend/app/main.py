@@ -1,14 +1,15 @@
 from fastapi import FastAPI
-from app.routers import events
 
 from app.database import engine
 from app.models.event import Event
+from app.routers import events, users
 
 Event.metadata.create_all(bind=engine)
 
-app = FastAPI(title="centre de suivi des événements")
+app = FastAPI(title="Piver Event Tracker API")
 
 app.include_router(events.router)
+app.include_router(users.router)
 
 @app.get("/")
 def health_check():
