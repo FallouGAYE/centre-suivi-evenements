@@ -1,7 +1,12 @@
 from fastapi import FastAPI
 from app.routers import events
 
-app = FastAPI(title="cente evenement API", version="1.0")
+from app.database import engine
+from app.models.event import Event
+
+Event.metadata.create_all(bind=engine)
+
+app = FastAPI(title="centre de suivi des événements")
 
 app.include_router(events.router)
 
