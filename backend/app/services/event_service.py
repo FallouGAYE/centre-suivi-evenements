@@ -1,24 +1,20 @@
-events_db = []
+from sqlalchemy.orm import Session
+from app.models.event import Event
 
-def add_event(event):
-    events_db.append(event)
+def add_event(db: Session, event_data: dict):
+    event = Event(**event_data)
+    db.add(event)
+    db.commit()
+    db.refresh(event)
+    return event
 
-def get_all_events():
-    return events_db
-
-def filter_events(user_id=None, event_type=None):
-    results = events_db
+def filter_events(db: Session, user_id=None, event_type=None):
+    query = db.query(Event)
 
     if user_id:
-        results = [
-            e for e in results
-            if e["user_id"] == user_id
-        ]
+        query = query.filter(Event.user_id == user_id)
 
     if event_type:
-        results = [
-            e for e in results
-            if e["type"] == event_type
-        ]
+        query = query.filter(Event.type == event_type)
 
-    return results
+    return query.order_by(Event.created_at.desc()).all()
